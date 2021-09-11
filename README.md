@@ -5,7 +5,9 @@ Reusable code to build a Pulumi stack with an S3 backend
 ## Requirements
 
 * Python 3
-* Cryptography
+* argparse
+* pulumi
+* pulumi-aws
 
 ## Testing building
 
