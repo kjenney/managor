@@ -38,8 +38,6 @@ def manage(args, pulumi_program):
     secrets_provider = f"awskms://alias/{kms_alias_name}"
     backend_url = f"s3://{backend_bucket}"
     environment = args.stack_name
-
-    os.environ['PULUMI_CONFIG_PASSPHRASE'] = f'{project_name}{stack_name}'
     
     project_settings=auto.ProjectSettings(
         name=project_name,
@@ -54,6 +52,7 @@ def manage(args, pulumi_program):
                                         project_name=project_name,
                                         program=pulumi_program,
                                         opts=auto.LocalWorkspaceOptions(project_settings=project_settings,
+                                                                        secrets_provider=secrets_provider,
                                                                         stack_settings={stack_name: stack_settings}))
 
 
