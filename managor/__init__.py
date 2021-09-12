@@ -15,7 +15,7 @@ import sys
 
 def args():
     parser = argparse.ArgumentParser(description='Manage a Pulumi automation stack.')
-    parser.add_argument('-n', '--project-name', required=False, default='data')
+    parser.add_argument('-n', '--project-name', required=False, default='test')
     parser.add_argument('-a', '--aws-region', required=False, default='us-east-1')
     parser.add_argument('-b', '--backend-bucket', required=True)
     parser.add_argument('-s', '--stack-name', required=False, default='dev')
