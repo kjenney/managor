@@ -18,6 +18,7 @@ setup(name='managor',
       install_requires=[
         'argparse',
         'pulumi',
-        'pulumi-aws'
+        'pulumi-aws',
+        'encrytor @ git+https://github.com/kjenney/encryptor.git'
       ],
       zip_safe=False)
