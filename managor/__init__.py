@@ -1,4 +1,5 @@
 import argparse
+import encryptor
 import json
 import pulumi
 import pulumi_aws as aws
@@ -22,6 +23,10 @@ def args():
     parser.add_argument('-k', '--kms-alias-name', required=True)
     parser.add_argument('-d', '--destroy', help='destroy the stack',
                         action='store_true')
+    parser.add_argument('-e', '--encrypted', help='used encrypted secrets',
+                    action='store_true')
+    parser.add_argument('-f', '--fernet-key-file', required=False, default='encrypted_secret.key')
+    parser.add_argument('-v', '--fernet-encrypted-file', required=False, default='encrypted_secrets.json')    
     return parser.parse_args()
 
 def manage(args, pulumi_program):
@@ -61,6 +66,13 @@ def manage(args, pulumi_program):
 
     # set stack configuration from argparse arguments and secrets
     print("setting up config")
+    if args.encrypted:
+        loaded_key = encryptor.key_load(args.fernet_key_file)
+        encryptor.file_decrypt(loaded_key, args.fernet_encrypted_file, f"/tmp/{args.fernet_encrypted_file}")
+        f = open(f"/tmp/{args.fernet_encrypted_file}")
+        secrets = json.load(f)
+        for key in secrets:
+            stack.set_config(key, auto.ConfigValue(value=secrets[key], secret=True))
     stack.set_config("aws:region", auto.ConfigValue(value=aws_region))
     stack.set_config("environment", auto.ConfigValue(value=environment))
     print("config set")
