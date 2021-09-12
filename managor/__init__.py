@@ -78,3 +78,4 @@ def manage(args, pulumi_program):
     print("updating stack...")
     up_res = stack.up(on_output=print)
     print(f"update summary: \n{json.dumps(up_res.summary.resource_changes, indent=4)}")
+    return up_res
