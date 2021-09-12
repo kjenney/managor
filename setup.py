@@ -19,6 +19,6 @@ setup(name='managor',
         'argparse',
         'pulumi',
         'pulumi-aws',
-        'encrytor @ git+https://github.com/kjenney/encryptor.git'
+        'encryptor @ git+https://github.com/kjenney/encryptor.git'
       ],
       zip_safe=False)
