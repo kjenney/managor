@@ -74,7 +74,7 @@ def manage(args, pulumi_program):
         secrets = json.load(f)
         for key in secrets:
             stack.set_config(key, auto.ConfigValue(value=secrets[key], secret=True))
-    stack.set_config("aws:region", auto.ConfigValue(value=aws_region))
+    stack.set_config("aws_region", auto.ConfigValue(value=aws_region))
     stack.set_config("environment", auto.ConfigValue(value=environment))
     print("config set")
 
@@ -97,7 +97,6 @@ def get_config(environment):
     if exists(f"environments/{environment}.yaml"):
         with open(f"environments/{environment}.yaml", "r") as stream:
             try:
-                dictionary = yaml.safe_load(stream)
+                return yaml.safe_load(stream)
             except yaml.YAMLError as exc:
                 print(exc)
-    return dictionary
