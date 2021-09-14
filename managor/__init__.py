@@ -4,8 +4,10 @@ import json
 import pulumi
 import pulumi_aws as aws
 from pulumi import automation as auto
-import os
 import sys
+import yaml
+from os.path import exists
+from pprint import pprint
 
 # Repeatable process for creating/update Pulumi stacks
 # Assumes:
@@ -63,7 +65,7 @@ def manage(args, pulumi_program):
     stack.workspace.install_plugin("aws", "v4.0.0")
     print("plugins installed")
 
-    # set stack configuration from argparse arguments and secrets
+    # set stack configuration from argparse arguments, local environment config and/or secrets
     print("setting up config")
     if args.encrypted:
         loaded_key = encryptor.key_load(args.fernet_key_file)
@@ -90,3 +92,12 @@ def manage(args, pulumi_program):
     up_res = stack.up(on_output=print)
     print(f"update summary: \n{json.dumps(up_res.summary.resource_changes, indent=4)}")
     return up_res
+
+def get_config(environment):
+    if exists(f"environments/{environment}.yaml"):
+        with open(f"environments/{environment}.yaml", "r") as stream:
+            try:
+                dictionary = yaml.safe_load(stream)
+            except yaml.YAMLError as exc:
+                print(exc)
+    return dictionary
